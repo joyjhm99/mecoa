@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MeCoa Talk Type 질문1</title>
+  <style>
+    body {
+      margin:0; padding:0;
+      font-family:'Pretendard',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      background:#fff; width:100vw; height:100vh;
+      display:flex; flex-direction:column;
+      justify-content:flex-start; align-items:center;
+      overflow:hidden; letter-spacing:-0.02em;
+    }
+
+    /* 중앙 텍스트 박스 */
+    .center-box {
+      margin-top:25vh;
+      display:flex; justify-content:center;
+      width:100%;
+    }
+    .text-wrapper {
+      max-width:600px;
+      text-align:left;
+    }
+    .question-label {
+      font-size:14px;
+      color:#6F6F6F;
+      margin-bottom:15px;
+      margin-left:2px;
+    }
+    .center-text span {
+      font-size:36px;
+      font-weight:500;
+      line-height:1.5;
+      color:#E5E5E5; /* 기본 회색 */
+      transition:color 0.2s ease;
+    }
+    .center-text span.active {
+      color:#000000; /* 활성화된 글자 */
+    }
+
+    /* 안내 문구 */
+    .guide {
+      font-size:16px;
+      color:#969696;
+      margin-top:9px;
+      margin-left:1px;
+      text-align:left;
+      opacity:0;
+      transition:opacity 0.4s ease;
+    }
+    .guide.show { opacity:1; }
+
+    .analyzing {
+      font-size:16px;
+      color:#34B0EF;
+      margin-top:9px;
+      margin-left:1px;
+      text-align:left;
+      display:none;
+    }
+
+    /* 하단 버튼 영역 */
+    .bottom_info {
+      display:flex; flex-direction:column;
+      justify-content:center; align-items:center;
+      height:30dvh;
+    }
+    .cta, .next-btn {
+      font-size:15px; font-weight:500;
+      border:none; border-radius:999px;
+      padding:14px 80px;
+      cursor:pointer;
+      letter-spacing:-0.02em;
+      transition:background 0.2s, color 0.2s;
+      margin-top:20px;
+    }
+    .cta:disabled, .next-btn:disabled {
+      background:#0C89C8; color:#0070AC; cursor:not-allowed;
+    }
+    .cta.enabled, .next-btn.enabled {
+      background:#34B0EF; color:#FFFFFF;
+    }
+
+    /* 음성 인식 파형 */
+    .waveform {
+      width:600px; height:40px;
+      display:flex; align-items:center; justify-content:center;
+      gap:3px; margin-top:30px; visibility:hidden;
+    }
+    .bar {
+      width:3px; height:10px; background:#C5C5C5;
+      animation: bounce 1s infinite ease-in-out;
+    }
+    .bar:nth-child(2){ animation-delay:0.1s; }
+    .bar:nth-child(3){ animation-delay:0.2s; }
+    .bar:nth-child(4){ animation-delay:0.3s; }
+    .bar:nth-child(5){ animation-delay:0.4s; }
+
+    @keyframes bounce {
+      0%,100% { height:10px; }
+      50% { height:35px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 중앙 텍스트 -->
+  <div class="center-box">
+    <div class="text-wrapper">
+      <div class="question-label">질문 1/5</div>
+      <div class="center-text" id="karaoke-text"></div>
+      <div class="guide" id="guide-text">답변하기를 누르고 말해보세요!</div>
+      <div class="analyzing" id="analyzing-text">미코가 음성 분석중...</div>
+    </div>
+  </div>
+
+  <!-- 오디오 (질문 읽어주는 음성) -->
+  <audio id="voice" src="./voice/q1.mp3"></audio>
+
+  <!-- 음성 인식 파형 -->
+  <div class="waveform" id="waveform">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <!-- 하단 버튼 -->
+  <div class="bottom_info">
+    <button class="cta" id="answerBtn" disabled>답변하기</button>
+    <button class="next-btn" id="nextBtn" style="display:none;">다음으로</button>
+  </div>
+
+<script>
+const text = "친구가 약속에 늦었다면,\n 당신은 친구에게 뭐라고 말할까요?";
+const container = document.getElementById("karaoke-text");
+const audio = document.getElementById("voice");
+const answerBtn = document.getElementById("answerBtn");
+const nextBtn = document.getElementById("nextBtn");
+const guide = document.getElementById("guide-text");
+const analyzing = document.getElementById("analyzing-text");
+const waveform = document.getElementById("waveform");
+
+// 질문 텍스트 span 분리
+text.split("").forEach(char=>{
+  const span = document.createElement("span");
+  if(char === "\n"){ span.innerHTML = "<br>"; }
+  else { span.textContent = char; }
+  container.appendChild(span);
+});
+
+// 페이지 로드 시 질문 오디오 1회 재생
+window.addEventListener("load", () => {
+  audio.play().catch(()=>console.log("자동재생 차단"));
+});
+
+// 오디오 싱크 맞추기 (0.4초 빠르게)
+audio.addEventListener("loadedmetadata", ()=>{
+  const duration = audio.duration - 0.9; // 기존보다 0.5초 앞당김
+  const spans = container.querySelectorAll("span");
+  spans.forEach((span,i)=>{
+    const start = (i / spans.length) * duration;
+    span.dataset.start = start;
+  });
+
+  // 버튼 활성화 예약
+  setTimeout(()=>{
+    answerBtn.disabled = false;
+    answerBtn.classList.add("enabled");
+    guide.classList.add("show");
+  }, (audio.duration - 0.5) * 1000);
+});
+
+// 글자 색 점등
+audio.addEventListener("timeupdate", ()=>{
+  const current = audio.currentTime;
+  const spans = container.querySelectorAll("span");
+  spans.forEach(span=>{
+    const start = parseFloat(span.dataset.start);
+    if(current >= start){ span.classList.add("active"); }
+  });
+});
+
+// 음성 인식
+let recognition;
+if ('webkitSpeechRecognition' in window) {
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = "ko-KR";
+  recognition.continuous = false;
+  recognition.interimResults = true;
+}
+
+// "답변하기" 클릭 → 인식 시작
+answerBtn.addEventListener("click", ()=>{
+  answerBtn.style.display = "none";
+  nextBtn.style.display = "inline-block";
+  nextBtn.disabled = true; // 처음엔 비활성화
+  guide.style.display = "none";
+  analyzing.style.display = "block";
+
+  if(recognition){
+    recognition.start();
+    waveform.style.visibility = "visible";
+    console.log("음성 인식 시작");
+  }
+
+  // 6초 후 인식 종료, 버튼 활성화 (파형 유지)
+  setTimeout(()=>{
+    if(recognition){ recognition.stop(); }
+    nextBtn.disabled = false;
+    nextBtn.classList.add("enabled");
+    console.log("인식 종료, 다음 버튼 활성화");
+  }, 6000);
+});
+
+// 결과 저장
+if(recognition){
+  recognition.onresult = (event)=>{
+    let transcript = event.results[0][0].transcript;
+    console.log("사용자 답변:", transcript);
+    localStorage.setItem("answer1", transcript);
+  };
+}
+
+// "다음으로" 버튼 클릭 → 다음 질문 페이지로 이동
+nextBtn.addEventListener('click', () => {
+  window.location.href = './question2.html';
+});
+</script>
+</body>
+</html>

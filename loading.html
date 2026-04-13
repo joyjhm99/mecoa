@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeCoa Talk Type 첫페이지</title>
+<style>
+  body {
+    margin:0; padding:0;
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#fff; width:100vw; height:100vh;
+    display:flex; flex-direction:column;
+    justify-content:flex-start; align-items:center;
+    overflow:hidden; letter-spacing:-0.02em;
+  }
+
+  .center-box { margin-top:40vh; text-align:center; }
+  .center-text {
+    font-size:30px;
+    font-weight:500;
+    line-height:1.5;
+    color:#34B0EF;
+  }
+
+  /* ==== marquee ==== */
+  .people-wrapper {
+    width:90vw; max-width:1600px; height:30dvh;
+    overflow:hidden; margin-top:auto; margin-bottom:5px;
+  }
+  .people-track {
+    display:flex; width:max-content;
+    animation:scroll 25s linear infinite;
+  }
+  .people-group {
+    display:flex; align-items:flex-end; gap:30px; flex:0 0 auto;
+  }
+  .people-group img { height:100px; object-fit:contain; }
+  .people-group img:last-child { margin-right:30px; }
+  .people-group img:nth-child(9) {
+    transform:scale(0.8);
+    transform-origin:bottom center;
+  }
+  @keyframes scroll {
+    from{transform:translate3d(0,0,0);}
+    to{transform:translate3d(-50%,0,0);}
+  }
+</style>
+</head>
+<body>
+  <!-- 중앙 텍스트 -->
+  <div class="center-box">
+    <div class="center-text">
+      당신의 톡타입을 분석 중이에요...
+    </div>
+  </div>
+
+  <!-- 무한 애니메이션 이미지 -->
+  <div class="people-wrapper">
+    <div class="people-track">
+      <div class="people-group">
+        <img src="./image/image 1.png"><img src="./image/image 2.png"><img src="./image/image 3.png">
+        <img src="./image/image 4.png"><img src="./image/image 5.png"><img src="./image/image 6.png">
+        <img src="./image/image 7.png"><img src="./image/image 8.png"><img src="./image/image 9.png">
+        <img src="./image/image 10.png"><img src="./image/image 11.png"><img src="./image/image 12.png">
+        <img src="./image/image 13.png"><img src="./image/image 14.png"><img src="./image/image 15.png"><img src="./image/image 16.png">
+      </div>
+      <div class="people-group" aria-hidden="true">
+        <img src="./image/image 1.png"><img src="./image/image 2.png"><img src="./image/image 3.png">
+        <img src="./image/image 4.png"><img src="./image/image 5.png"><img src="./image/image 6.png">
+        <img src="./image/image 7.png"><img src="./image/image 8.png"><img src="./image/image 9.png">
+        <img src="./image/image 10.png"><img src="./image/image 11.png"><img src="./image/image 12.png">
+        <img src="./image/image 13.png"><img src="./image/image 14.png"><img src="./image/image 15.png"><img src="./image/image 16.png">
+      </div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+<script>
+async function analyzeTalkType() {
+  const userDialogue = [
+    { question: "친구가 약속에 늦었다면,\n 당신은 친구에게 뭐라고 말할까요?", answer: localStorage.getItem("answer1") },
+    { question: "만약 지금 바로 떠날 수 있다면,\n 당신은 어디로 떠나고 싶으신가요?", answer: localStorage.getItem("answer2") },
+    { question: "누군가 나의 의견에 기분 나쁘게 반박할 때,\n 당신은 어떻게 대처하시나요?", answer: localStorage.getItem("answer3") },
+    { question: "나의 카톡 답장 스타일은?\n 바로 한다 vs 나중에 몰아서 한다", answer: localStorage.getItem("answer4") },
+    { question: "요즘 내가 자주쓰는 말버릇이 있다면?", answer: localStorage.getItem("answer5") }
+  ];
+
+  const formattedDialogue = userDialogue.map(item => `Q: ${item.question}\nA: ${item.answer}`).join("\n\n");
+
+  const prompt = [
+    {
+      role: "system",
+      content: "너는 AI 커뮤니케이션 코치 '미코(Me Coa)'의 분석 엔진이다. 사용자의 대화 데이터를 바탕으로 말하기 성향을 분석하고, 4가지 축의 성향 퍼센티지와 최종 톡타입 코드를 도출한다.\n\n분석 기준은 다음과 같다:\n1️⃣ 표현방식 (Expression Style): E=표현형 / I=내면형\n2️⃣ 대화 주도성 (Conversation Drive): L=주도형 / N=배려형\n3️⃣ 말 전달방식 (Delivery Style): T=논리형 / S=감정형\n4️⃣ 말투 유연성 (Flexibility): A=유연형 / R=고정형\n\n각 축의 퍼센티지는 0~100% 사이 값으로 출력하며, 50을 기준으로 가까운 쪽을 선택해 해당 성향을 부여한다.\n모든 분석은 사용자의 말투, 표현방식, 주도성, 감정적 어조, 문장 구조 등을 종합적으로 고려한다.\n출력은 반드시 JSON 형식으로 반환한다.\n\n출력 예시는 아래와 같다:\n{\n  \"expression\": {\"E\": 72, \"I\": 28, \"reasoning\": \"사용자가 자주 사용하는 표현 방식이 외향적이고 직접적입니다.\"},\n  \"drive\": {\"S\": 65, \"N\": 35, \"reasoning\": \"대화에서 주도적으로 의견을 제시하는 경향이 있습니다.\"},\n  \"delivery\": {\"L\": 40, \"T\": 60, \"reasoning\": \"감정적인 어조와 공감을 자주 표현합니다.\"},\n  \"flexibility\": {\"A\": 54, \"R\": 46, \"reasoning\": \"상황에 따라 말투를 유연하게 조정합니다.\"},\n  \"result_type\": \"ESTA\"\n}"
+    },
+    {
+      role: "user",
+      content: `다음은 사용자의 실제 대화 로그입니다. 아래 데이터를 기반으로 성향 퍼센티지 4가지와 최종 톡타입 코드를 도출하세요.\n\n[대화 로그]\n${formattedDialogue}\n\n결과는 각 성향에 대한 근거(reasoning)를 포함하여 위 예시 JSON 형식과 동일하게 출력하세요.`
+    }
+  ];
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${MeCoa_api_key}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: prompt
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error("API 요청 실패");
+    }
+
+    const data = await response.json();
+    const result = JSON.parse(data.choices[0].message.content);
+
+    // 결과 저장
+    localStorage.setItem("analysisResult", JSON.stringify(result));
+
+    // 결과 페이지로 이동
+    window.location.href = "./result.html";
+  } catch (error) {
+    console.error("분석 중 오류 발생:", error);
+    alert("분석 중 문제가 발생했습니다. 다시 시도해주세요.");
+  }
+}
+
+// 페이지 로드 시 분석 시작
+window.addEventListener("load", analyzeTalkType);
+</script>
+</body>
+</html>

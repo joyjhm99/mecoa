@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeCoa Talk Type 결과 페이지</title>
+<style>
+  body {
+    margin:0; padding:0;
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#D8D8D8; width:100vw; height:100vh;
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    overflow:hidden; letter-spacing:-0.02em;
+    position:relative;
+  }
+
+  /* 결과 카드 (영수증 종이) */
+  .result-card {
+    background:#fff;
+    width:420px;
+    padding:20px;
+    padding-bottom:50px; /* 종이 하단 길이 */
+    border-radius:0px;
+    text-align:left;
+    position:fixed;
+    bottom:140px; /* 위치는 그대로 */
+    left:50%;
+    transform:translateX(-50%);
+    z-index:5;
+    animation:slideUp 3s ease-out forwards;
+  }
+
+  @keyframes slideUp {
+    from { bottom:-100%; }
+    to   { bottom:140px; } /* 위치 그대로 */
+  }
+
+  .result-image img { width:100%; border-radius:2px; }
+  .result-title { margin-top:18px; font-size:16px; color:#111; font-weight:400; }
+  .result-type { font-size:32px; font-weight:600; margin:6px 0 16px 0; }
+  .result-desc { font-size:14px; color:#34B0EF; margin-bottom:22px; line-height:140%; white-space: pre-line;}
+  .result-type .light { font-weight:400; }
+
+  /* 그래프 */
+  .bar-row { display:flex; align-items:center; margin-bottom:10px; font-size:13px; color:#333; }
+  .bar-label { flex:0 0 100px; }
+  .bar { flex:1; background:#eee; height:8px; border-radius:4px; overflow:hidden; margin-right:8px; }
+  .bar-fill { height:100%; background:#000; }
+  .bar-value { flex:0 0 40px; text-align:right; }
+  .note { margin-top:20px; font-size:13px; color:#ffffff; text-align:center; }
+
+  /* 다시 테스트 버튼 */
+  .retry-btn {
+    position:absolute;
+    top:30px; right:30px;
+    background:#fff;
+    border:none;
+    border-radius:999px;
+    padding:14px 20px;
+    font-size:14px;
+    cursor:pointer;
+  }
+
+  /* 영수증 기계 위 (맨 밑) */
+  .receipt-machine-top {
+    position:fixed;
+    bottom:143px;
+    left:50.6%;
+    transform:translateX(-50%);
+    width:612px;
+    z-index:4;
+    pointer-events:none;
+  }
+
+  /* 영수증 기계 밑 (맨 위) */
+  .receipt-machine-bottom {
+    position:fixed;
+    bottom:-40px;
+    left:50%;
+    transform:translateX(-50%);
+    width:700px;
+    z-index:10;
+  }
+
+  /* ==== marquee ==== */
+  .people-wrapper {
+    width:90vw; max-width:1600px; height:30dvh;
+    overflow:hidden; margin-top:auto; margin-bottom:5px;
+    opacity:0.3;
+  }
+  .people-track {
+    display:flex; width:max-content;
+    animation:scroll 25s linear infinite;
+  }
+  .people-group {
+    display:flex; align-items:flex-end; gap:30px; flex:0 0 auto;
+  }
+  .people-group img { height:100px; object-fit:contain; }
+  .people-group img:last-child { margin-right:30px; }
+  .people-group img:nth-child(9) {
+    transform:scale(0.8);
+    transform-origin:bottom center;
+  }
+  @keyframes scroll {
+    from{transform:translate3d(0,0,0);}
+    to{transform:translate3d(-50%,0,0);}
+  }
+</style>
+</head>
+<body>
+  <!-- 다시하기 버튼 -->
+  <button class="retry-btn">다시 테스트 하기</button>
+
+  <!-- 영수증 기계 위 (맨 밑) -->
+  <img src="./image/receipt_up.png" alt="영수증 기계 위" class="receipt-machine-top">
+
+  <!-- 결과 카드 -->
+  <div class="result-card">
+    <div class="result-image">
+      <img src="./image/엽서1.png" alt="Result Image">
+    </div>
+    <div class="result-title">미코가 분석한 당신의 톡타입은</div>
+    <div class="result-type">ENSR <span class="light"> 입니다.</span></div>
+    <div class="result-desc">나의 생각을 잘 표현하고 남의 이야기에 잘 반응하는 말하기 타입이에요.  
+유연한 말하기 방식을 가지고 계시네요!</div>
+
+    <div class="bar-row-group"></div>
+
+    <div class="note">QR코드를 통해 결과 이미지를 저장할 수 있어요!</div>
+  </div>
+
+  <!-- 영수증 기계 밑 (맨 위) -->
+  <img src="./image/receipt_up.png" alt="영수증 기계 밑" class="receipt-machine-bottom">
+
+  <!-- 무한 애니메이션 사람 이미지 -->
+  <div class="people-wrapper">
+    <div class="people-track">
+      <div class="people-group">
+        <img src="./image/image 1.png"><img src="./image/image 2.png"><img src="./image/image 3.png">
+        <img src="./image/image 4.png"><img src="./image/image 5.png"><img src="./image/image 6.png">
+        <img src="./image/image 7.png"><img src="./image/image 8.png"><img src="./image/image 9.png">
+        <img src="./image/image 10.png"><img src="./image/image 11.png"><img src="./image/image 12.png">
+        <img src="./image/image 13.png"><img src="./image/image 14.png"><img src="./image/image 15.png"><img src="./image/image 16.png">
+      </div>
+      <div class="people-group" aria-hidden="true">
+        <img src="./image/image 1.png"><img src="./image/image 2.png"><img src="./image/image 3.png">
+        <img src="./image/image 4.png"><img src="./image/image 5.png"><img src="./image/image 6.png">
+        <img src="./image/image 7.png"><img src="./image/image 8.png"><img src="./image/image 9.png">
+        <img src="./image/image 10.png"><img src="./image/image 11.png"><img src="./image/image 12.png">
+        <img src="./image/image 13.png"><img src="./image/image 14.png"><img src="./image/image 15.png"><img src="./image/image 16.png">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("load", () => {
+      const result = JSON.parse(localStorage.getItem("analysisResult"));
+      if (!result) {
+        alert("결과 데이터를 불러올 수 없습니다. 다시 시도해주세요.");
+        return;
+      }
+  
+      // 1) 타입 문자열 안전 처리 (공백 제거 + 대문자 통일)
+      const safeType = (result.result_type || "").toString().trim().toUpperCase();
+  
+      // 2) 폴더 경로를 페이지 상단에서 쓰는 폴더와 동일하게 맞춤
+      //    => ./image
+      const IMG_DIR = "./미코 이미지";
+  
+      // 3) 결과 텍스트
+      document.querySelector(".result-type").innerHTML = `${safeType} <span class="light"> 입니다.</span>`;
+  
+      // 4) 결과 이미지 적용 + onerror 백업 이미지
+      const imgEl = document.querySelector(".result-image img");
+      function setResultImage(type) {
+        imgEl.src = `${IMG_DIR}/${type}.png`;
+      }
+      setResultImage(safeType);
+  
+      // 파일 없을 때 대문자→소문자 재시도 → 마지막엔 기본 이미지
+      imgEl.onerror = () => {
+        const lower = safeType.toLowerCase();
+        if (imgEl.src.endsWith(`${safeType}.png`)) {
+          setResultImage(lower);              // 소문자 재시도
+        } else if (imgEl.src.endsWith(`${lower}.png`)) {
+          imgEl.src = `${IMG_DIR}/default.png`; // 최종 백업
+        }
+      };
+  
+      // ===== 아래는 기존 로직 유지 (설명, 그래프 등) =====
+      const typeDescriptions = {
+        "ELTA": "자기 생각을 똑 부러지게 말하는 타입이에요.\n말할 때마다 중심이 잡혀 있어서 신뢰가 가요!",
+        "ELSA": "감정 표현이 자연스러워서 분위기를 살리는 사람이에요.\n진심이 묻어나는 말로 사람들을 끌어당기네요!",
+        "ELTR": "논리적으로 말하면서도 당당한 스타일이에요.\n명확하게 말해줘서 듣는 사람이 속이 시원하대요!",
+        "ELSR": "따뜻함과 이성의 밸런스가 좋은 타입이에요.\n말 한마디로 분위기를 부드럽게 바꾸는 능력이 있어요!",
+        "ENTA": "배려심 많지만 리더십도 있는 스타일이에요.\n대화를 하면 자연스럽게 믿음이 생기네요!",
+        "ENSA": "감정에 공감하면서도 리듬감 있게 말하는 타입이에요.\n듣는 사람 기분을 좋게 만드는 능력이 있어요!",
+        "ENTR": "이성적인데 따뜻한 매력도 있는 타입이에요.\n조용하지만 설득력 있는 말로 사람을 끌어당기네요!",
+        "ENSR": "자기 생각을 잘 표현하고 남의 이야기도 귀 기울이는 타입이에요.\n말의 온도가 딱 적당해서 듣기 편해요!",
+        "ILTA": "조용하지만 말 한마디 한마디가 묵직한 타입이에요.\n필요할 때만 말해서 더 믿음이 가요!",
+        "ILSA": "감정이 섬세하고 진심 어린 대화를 좋아해요.\n말이 잔잔해서 듣는 사람 마음을 편하게 해요!",
+        "ILTR": "차분하고 논리적인 대화 스타일이에요.\n감정에 휘둘리지 않고 깔끔하게 정리해주는 사람이네요!",
+        "ILSR": "조용하지만 따뜻하게 말하는 타입이에요.\n감정과 이성의 균형을 잘 아는 똑똑한 대화가 인상적이에요!",
+        "INTA": "신중하게 듣고 논리적으로 말하는 타입이에요.\n객관적으로 상황을 보는 통찰력이 있네요!",
+        "INSA": "부드럽고 따뜻한 말로 사람 마음을 잘 어루만져요.\n말 한마디에 진심이 느껴지는 사람이에요!",
+        "INTR": "말을 많이 하진 않지만 꼭 필요한 말만 딱 해요.\n깔끔하고 효율적인 커뮤니케이터네요!",
+        "INSR": "차분하면서도 다정한 타입이에요.\n듣는 사람에게 안정감을 주는 목소리를 가졌네요!"
+      };
+      document.querySelector(".result-desc").textContent = typeDescriptions[safeType];
+  
+      const barData = [
+        { label: safeType[0] === "E" ? "표현형 (E)" : "내면형 (I)", value: result.expression[safeType[0]] },
+        { label: safeType[1] === "L" ? "주도형 (L)" : "배려형 (N)", value: result.drive[safeType[1]] },
+        { label: safeType[2] === "T" ? "논리형 (T)" : "감정형 (S)", value: result.delivery[safeType[2]] },
+        { label: safeType[3] === "A" ? "유연형 (A)" : "고정형 (R)", value: result.flexibility[safeType[3]] }
+      ];
+      const barContainer = document.querySelector(".bar-row-group");
+      barData.forEach(data => {
+        const barRow = document.createElement("div");
+        barRow.className = "bar-row";
+        barRow.innerHTML = `
+          <div class="bar-label">${data.label}</div>
+          <div class="bar"><div class="bar-fill" style="width:${data.value}%;"></div></div>
+          <div class="bar-value">${data.value}%</div>`;
+        barContainer.appendChild(barRow);
+      });
+    });
+  
+    document.querySelector(".retry-btn").addEventListener("click", () => {
+      window.location.href = "./index.html";
+    });
+  </script>
+  
+</body>
+</html>

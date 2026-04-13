@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeCoa Talk Type 첫페이지</title>
+<style>
+  body {
+    margin:0; padding:0;
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#fff; width:100vw; height:100vh;
+    display:flex; flex-direction:column;
+    justify-content:flex-start; align-items:center;
+    overflow:hidden; letter-spacing:-0.02em;
+  }
+
+  .center-box { margin-top:25vh; }
+  .center-text {
+    text-align:left;
+    font-size:36px;
+    font-weight:500;
+    line-height:1.5;
+  }
+
+  /* 글자 색 기본 */
+  .char {
+    color:#E5E5E5;
+    transition:color 0.2s linear;
+  }
+  .char.active {
+    color:#000;
+  }
+
+  /* ==== marquee ==== */
+  .people-wrapper {
+    width:90vw; max-width:1600px; height:30dvh;
+    overflow:hidden; margin-top:auto; margin-bottom:5px;
+  }
+  .people-track {
+    display:flex; width:max-content;
+    animation:scroll 25s linear infinite;
+  }
+  .people-group {
+    display:flex; align-items:flex-end; gap:30px; flex:0 0 auto;
+  }
+  .people-group img { height:100px; object-fit:contain; }
+  .people-group img:last-child { margin-right:30px; }
+  .people-group img:nth-child(9) {
+    transform:scale(0.8);
+    transform-origin:bottom center;
+  }
+  @keyframes scroll {
+    from{transform:translate3d(0,0,0);}
+    to{transform:translate3d(-50%,0,0);}
+  }
+</style>
+</head>
+<body>
+  <!-- 중앙 텍스트 -->
+  <div class="center-box">
+    <div class="center-text" id="lyric">
+      반가워요, 저는 미코에요.<br>
+      지금부터 짧은 대화를 통해서<br>
+      당신의 톡타입을 분석해드릴게요!
+    </div>
+  </div>
+
+  <!-- 오디오 -->
+  <audio id="voice" src="./voice/hello.mp3" autoplay></audio>
+
+  <!-- 무한 애니메이션 이미지 -->
+  <div class="people-wrapper">
+    <div class="people-track">
+      <div class="people-group">
+        <img src="./image/image 1.png"><img src="./image/image 2.png"><img src="./image/image 3.png">
+        <img src="./image/image 4.png"><img src="./image/image 5.png"><img src="./image/image 6.png">
+        <img src="./image/image 7.png"><img src="./image/image 8.png"><img src="./image/image 9.png">
+        <img src="./image/image 10.png"><img src="./image/image 11.png"><img src="./image/image 12.png">
+        <img src="./image/image 13.png"><img src="./image/image 14.png"><img src="./image/image 15.png"><img src="./image/image 16.png">
+      </div>
+      <div class="people-group" aria-hidden="true">
+        <img src="./image/image 1.png"><img src="./image/image 2.png"><img src="./image/image 3.png">
+        <img src="./image/image 4.png"><img src="./image/image 5.png"><img src="./image/image 6.png">
+        <img src="./image/image 7.png"><img src="./image/image 8.png"><img src="./image/image 9.png">
+        <img src="./image/image 10.png"><img src="./image/image 11.png"><img src="./image/image 12.png">
+        <img src="./image/image 13.png"><img src="./image/image 14.png"><img src="./image/image 15.png"><img src="./image/image 16.png">
+      </div>
+    </div>
+  </div>
+
+<script>
+const lyricEl = document.getElementById('lyric');
+const text = lyricEl.innerHTML;
+lyricEl.innerHTML = ''; // 초기화
+
+// 줄바꿈 <br> 유지하면서 글자 분리
+text.split(/(<br>)/g).forEach(part=>{
+  if(part === '<br>'){
+    lyricEl.appendChild(document.createElement('br'));
+  } else {
+    [...part].forEach(ch=>{
+      const span = document.createElement('span');
+      span.textContent = ch;
+      span.classList.add('char');
+      lyricEl.appendChild(span);
+    });
+  }
+});
+
+const chars = document.querySelectorAll('.char');
+const audio = document.getElementById('voice');
+
+audio.addEventListener('timeupdate', ()=>{
+  if(audio.duration > 0){
+    // 끝나는건 0.5초 늦게
+    const adjustedDuration = audio.duration + 0.5;
+    // 시작은 0.5초 당겨서 보정
+    const adjustedTime = Math.max(audio.currentTime + 1.0, 0);
+    const progress = Math.min(adjustedTime / adjustedDuration, 1);
+
+    const charCount = Math.floor(progress * chars.length);
+    chars.forEach((ch, idx)=>{
+      if(idx < charCount){
+        ch.classList.add('active');
+      } else {
+        ch.classList.remove('active');
+      }
+    });
+  }
+});
+
+audio.addEventListener('ended', () => {
+  setTimeout(() => {
+    window.location.href = './question1.html';
+  }, 1500); // 음성 끝난 후 1.5초 후 페이지 이동
+});
+</script>
+</body>
+</html>

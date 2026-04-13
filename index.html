@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeCoa Talk Type 랜딩페이지</title>
+<style>
+  body {
+    margin:0; padding:0;
+    font-family:'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:#fff; width:100vw; height:100vh;
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    overflow:hidden; letter-spacing:-0.02em;
+  }
+
+  /* 로고 영역 */
+  .logo{
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;       /* 하단 정렬 유지 */
+    margin-top:18vh;
+    margin-bottom:60px;
+    gap:8px;                    /* 기존 margin-left 대체 */
+    white-space:nowrap;         /* 줄바꿈 방지 → '석' 내려가는 현상 예방 */
+  }
+  .logo img{
+    height:58px; 
+    object-fit:contain;
+    display:block;              /* inline baseline 간극 제거 */
+  }
+  .logo span{
+    font-size:38px; 
+    font-weight:400;
+    display:block;              /* baseline 영향 제거 */
+    line-height:1;              /* 폰트 메트릭 차이로 인한 들쭉날쭉 방지 */
+    /* 필요시 미세 보정 (1~3px 사이로 취향 조절) */
+    /* transform: translateY(1px); */
+  }
+
+  /* ==== marquee (사람들 애니메이션) ==== */
+  .people-wrapper {
+    width:90vw; max-width:1600px; height:30dvh;
+    overflow:hidden; margin:20px auto;
+  }
+  .people-track {
+    display:flex; width:max-content;
+    animation:scroll 28s linear infinite;
+    will-change:transform; transform:translate3d(0,0,0);
+  }
+  .people-group {
+    display:flex; align-items:flex-end; gap:30px;
+    flex:0 0 auto;
+  }
+  .people-group img { height:100px; object-fit:contain; }
+  .people-group img:nth-child(9) {
+    transform:scale(0.8);
+    transform-origin:bottom center;
+  }
+  .people-group img:last-child { margin-right:30px; }
+  .people-group img:nth-child(8) { margin-right:-20px; }
+  .people-group img:nth-child(9) { margin-right:-15px; }
+
+  @keyframes scroll {
+    from { transform:translate3d(0,0,0); }
+    to   { transform:translate3d(-50%,0,0); }
+  }
+
+  /* 하단 CTA */
+  .bottom_info {
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    margin-top:40px;
+  }
+  .cta {
+    background:#34B0EF; color:#fff;
+    font-size:15px; font-weight:500;
+    border:none; border-radius:999px;
+    padding:14px 40px; cursor:pointer;
+    letter-spacing:-0.02em;
+  }
+  .cta:hover {
+    background:#34B0EF;
+    color:#006DA3;
+  }
+  .sub {
+    margin-top:13px; margin-inline:30px;
+    font-size:14px; color:#6F6F6F;
+    letter-spacing:-0.01em;
+  }
+</style>
+</head>
+<body>
+  <!-- 로고 -->
+  <div class="logo">
+    <img src="./image/mecoa_logo.png" alt="Me Coa 로고">
+    <span>의 톡타입 분석</span>
+  </div>
+
+  <!-- 무한 애니메이션 인물 -->
+  <div class="people-wrapper">
+    <div class="people-track">
+      <!-- 그룹 1 -->
+      <div class="people-group">
+        <img src="./image/image 1.png" alt="">
+        <img src="./image/image 2.png" alt="">
+        <img src="./image/image 3.png" alt="">
+        <img src="./image/image 4.png" alt="">
+        <img src="./image/image 5.png" alt="">
+        <img src="./image/image 6.png" alt="">
+        <img src="./image/image 7.png" alt="">
+        <img src="./image/image 8.png" alt="">
+        <img src="./image/image 9.png" alt="">
+        <img src="./image/image 10.png" alt="">
+        <img src="./image/image 11.png" alt="">
+        <img src="./image/image 12.png" alt="">
+        <img src="./image/image 13.png" alt="">
+        <img src="./image/image 14.png" alt="">
+        <img src="./image/image 15.png" alt="">
+        <img src="./image/image 16.png" alt="">
+      </div>
+      <!-- 그룹 2 (복제) -->
+      <div class="people-group" aria-hidden="true">
+        <img src="./image/image 1.png" alt="">
+        <img src="./image/image 2.png" alt="">
+        <img src="./image/image 3.png" alt="">
+        <img src="./image/image 4.png" alt="">
+        <img src="./image/image 5.png" alt="">
+        <img src="./image/image 6.png" alt="">
+        <img src="./image/image 7.png" alt="">
+        <img src="./image/image 8.png" alt="">
+        <img src="./image/image 9.png" alt="">
+        <img src="./image/image 10.png" alt="">
+        <img src="./image/image 11.png" alt="">
+        <img src="./image/image 12.png" alt="">
+        <img src="./image/image 13.png" alt="">
+        <img src="./image/image 14.png" alt="">
+        <img src="./image/image 15.png" alt="">
+        <img src="./image/image 16.png" alt="">
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA 버튼 -->
+  <div class="bottom_info">
+    <button class="cta">나의 톡타입 분석하러 가기</button>
+    <p class="sub">미코와의 대화를 통해 나의 톡타입을 알아보세요!</p>
+  </div>
+
+  <script>
+    document.querySelector('.cta').addEventListener('click', () => {
+      window.location.href = './init.html';
+    });
+  </script>
+</body>
+</html>

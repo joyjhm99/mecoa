@@ -113,7 +113,7 @@ async function analyzeTalkType() {
     }
 
     const data = await response.json();
-    const result = JSON.parse(data.choices[0].message.content);
+    const result = JSON.parse(data.output);
 
     // 결과 저장
     localStorage.setItem("analysisResult", JSON.stringify(result));
